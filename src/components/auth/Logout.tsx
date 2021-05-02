@@ -1,6 +1,6 @@
 import React from "react";
 
-const Logout: React.FC<{}> = ({}) => {
+const Logout: React.FC<{}> = () => {
   return (
     <>
       <hr>You are logout</hr>

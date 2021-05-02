@@ -5,9 +5,9 @@ import { AuthenticationService } from "./todo/AuthenticationService";
 
 interface HeaderProps {}
 
-const Header: React.FC<HeaderProps> = ({}) => {
+const Header: React.FC<HeaderProps> = () => {
   const isUserLoggedIn = AuthenticationService.isUserLoggedIn();
-  console.log(isUserLoggedIn);
+
   return (
     <div>
       <header>

@@ -1,28 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { IListToDo, TodoDataService } from "../api/todo/TodoDataService";
+import { AuthenticationService } from "./AuthenticationService";
+import moment from "moment";
 
-interface ListToDosProps {}
+const ListToDos: React.FC<IListToDo> = () => {
+  const [todo, setTodo] = useState<IListToDo[] | []>([]);
 
-const ListToDos: React.FC<ListToDosProps> = ({}) => {
-  const [todo] = useState([
-    {
-      id: 1,
-      description: "Learn React",
-      done: false,
-      targetDate: new Date(),
-    },
-    {
-      id: 2,
-      description: "dsdasdasd",
-      done: false,
-      targetDate: new Date(),
-    },
-    {
-      id: 3,
-      description: "ffdasdasdas",
-      done: false,
-      targetDate: new Date(),
-    },
-  ]);
+  // initial data fetching when page first renders
+  useEffect(() => {
+    async function fetchData() {
+      let username = AuthenticationService.getLoggedInUserName();
+      const response = await TodoDataService.executeTodoDataService(username);
+
+      if (response) {
+        setTodo(response);
+      }
+    }
+
+    fetchData();
+  }, []);
 
   return (
     <div>
@@ -31,18 +27,17 @@ const ListToDos: React.FC<ListToDosProps> = ({}) => {
         <table className="table">
           <thead>
             <tr>
-              <th>id</th>
               <th>Description</th>
               <th>Target Date</th>
               <th>Is Completed?</th>
             </tr>
           </thead>
           <tbody>
-            {todo.map((item) => (
+            {todo.map((item: IListToDo) => (
               <tr key={item.id}>
                 <td>{item.description}</td>
-                <td>{item.done.toString()}</td>
-                <td>{item.targetDate.toString()}</td>
+                <td>{moment(item.targetDate).format("DD-MM_YYYY")}</td>
+                <td>{item.completed.toString()}</td>
               </tr>
             ))}
           </tbody>
